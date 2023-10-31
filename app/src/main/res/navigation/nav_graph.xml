@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/adress_view">
+
+    <fragment
+        android:id="@+id/adress_view"
+        android:name="com.example.locationpinned.AddressView"
+        android:label="fragment_adress_view"
+        tools:layout="@layout/fragment_adress_view" >
+        <action
+            android:id="@+id/action_adress_view_to_newAddress"
+            app:destination="@id/newAddress" />
+    </fragment>
+    <fragment
+        android:id="@+id/newAddress"
+        android:name="com.example.locationpinned.NewAddress"
+        android:label="fragment_new_address"
+        tools:layout="@layout/fragment_new_address" >
+        <action
+            android:id="@+id/action_newAddress_to_adress_view"
+            app:destination="@id/adress_view" />
+    </fragment>
+</navigation>
