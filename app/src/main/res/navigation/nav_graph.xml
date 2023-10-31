@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/adress_view"
         android:name="com.example.locationpinned.AddressView"
-        android:label="fragment_adress_view"
-        tools:layout="@layout/fragment_adress_view" >
+        android:label="Location Pinned"
+        tools:layout="@layout/fragment_address_view" >
         <action
             android:id="@+id/action_adress_view_to_newAddress"
             app:destination="@id/newAddress" />
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/newAddress"
         android:name="com.example.locationpinned.NewAddress"
-        android:label="fragment_new_address"
+        android:label="Input New Address"
         tools:layout="@layout/fragment_new_address" >
         <action
             android:id="@+id/action_newAddress_to_adress_view"
