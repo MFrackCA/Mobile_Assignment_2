@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class FindAddressHelper {
+public class GeocoderHelper {
 
     private Geocoder geocoder;
 
-    public FindAddressHelper(Context context) {
+    public GeocoderHelper(Context context) {
         this.geocoder = new Geocoder(context, Locale.getDefault());
     }
     // Geocoder method to get Address by passing latitude and longitude

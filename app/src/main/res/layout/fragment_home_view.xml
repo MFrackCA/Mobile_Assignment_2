@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".AddressView">
+    tools:context=".HomeView">
 
 
     <androidx.appcompat.widget.SearchView
@@ -29,6 +29,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/button_background"
         android:text="Load Text File"
+        android:textSize="20sp"
         app:backgroundTint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"

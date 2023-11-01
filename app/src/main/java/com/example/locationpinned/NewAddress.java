@@ -17,11 +17,11 @@ public class NewAddress extends Fragment {
 
     private FragmentNewAddressBinding binding;
     private DatabaseHelper db;
-    private FindAddressHelper findAddressHelper;
+    private GeocoderHelper findAddressHelper;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getActivity());
-        findAddressHelper = new FindAddressHelper(getActivity());
+        findAddressHelper = new GeocoderHelper(getActivity());
     }
 
 

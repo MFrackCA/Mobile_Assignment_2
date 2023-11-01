@@ -11,20 +11,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.locationpinned.databinding.FragmentEditAddressBinding;
-import com.example.locationpinned.databinding.FragmentNewAddressBinding;
 
 
 public class EditAddress extends Fragment {
 
     private FragmentEditAddressBinding binding;
     private DatabaseHelper db;
-    private FindAddressHelper findAddressHelper;
+    private GeocoderHelper findAddressHelper;
     private Bundle bundle;
     private LocationObject locationObject;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getActivity());
-        findAddressHelper = new FindAddressHelper(getActivity());
+        findAddressHelper = new GeocoderHelper(getActivity());
 
         // unpack bundle for location
         bundle = this.getArguments();

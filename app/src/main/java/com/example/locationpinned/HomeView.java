@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.locationpinned.databinding.FragmentAddressViewBinding;
+import com.example.locationpinned.databinding.FragmentHomeViewBinding;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddressView extends Fragment {
+public class HomeView extends Fragment {
 
-    private FragmentAddressViewBinding binding;
+    private FragmentHomeViewBinding binding;
     private List<LocationObject> locationObjects = new ArrayList<>();
-    private FindAddressHelper findAddressHelper;
+    private GeocoderHelper findAddressHelper;
 
     private DatabaseHelper db;
     private SearchView searchView;
@@ -38,7 +38,7 @@ public class AddressView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialize geocoder
-        findAddressHelper = new FindAddressHelper(getContext());
+        findAddressHelper = new GeocoderHelper(getContext());
         db = new DatabaseHelper(getActivity());
         //db.deleteAllData();
     }
@@ -47,11 +47,11 @@ public class AddressView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Initialize Binding
-        binding = FragmentAddressViewBinding.inflate(inflater, container, false);
+        binding = FragmentHomeViewBinding.inflate(inflater, container, false);
 
         // Add New Address
         binding.addAddress.setOnClickListener(v ->
-            NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_address_view_to_newAddress));
+            NavHostFragment.findNavController(HomeView.this).navigate(R.id.action_address_view_to_newAddress));
 
         // Load File from Raw Resource
         binding.loadFile.setOnClickListener(v -> {
@@ -124,7 +124,7 @@ public class AddressView extends Fragment {
             view.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("location", location);
-                NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_address_view_to_editAddress, bundle);
+                NavHostFragment.findNavController(HomeView.this).navigate(R.id.action_address_view_to_editAddress, bundle);
             });
             // Add margins between cards
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(

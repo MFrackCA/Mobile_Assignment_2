@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/address_view"
-        android:name="com.example.locationpinned.AddressView"
+        android:name="com.example.locationpinned.HomeView"
         android:label="Locations Pinned"
-        tools:layout="@layout/fragment_address_view" >
+        tools:layout="@layout/fragment_home_view" >
         <action
             android:id="@+id/action_address_view_to_newAddress"
             app:destination="@id/newAddress" />
