@@ -1,64 +1,73 @@
 package com.example.locationpinned;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NewAddress#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.locationpinned.databinding.FragmentNewAddressBinding;
+
+
 public class NewAddress extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public NewAddress() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewAddress.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NewAddress newInstance(String param1, String param2) {
-        NewAddress fragment = new NewAddress();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
+    private FragmentNewAddressBinding binding;
+    private DatabaseHelper db;
+    private FindAddress findAddress;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        db = new DatabaseHelper(getActivity());
+        findAddress = new FindAddress(getActivity());
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_address, container, false);
+
+        binding = FragmentNewAddressBinding.inflate(inflater, container, false);
+
+
+        // cancel new note
+        binding.cancel.setOnClickListener(v -> {
+            // Navigate back to home screen
+            NavHostFragment.findNavController(NewAddress.this)
+                    .navigate(R.id.action_newAddress_to_address_view);
+        });
+
+        // Find address with geocode
+        binding.geocode.setOnClickListener(v -> {
+
+                double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
+                double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+                // Call geocode method
+                String address = findAddress.getAddressFromLatLng(latitude, longitude);
+
+                if (address != null) {
+                    binding.textView.setText(address);
+                } else {
+                    binding.textView.setText("Address not found.");
+                }
+        });
+
+        binding.saveAddress.setOnClickListener(v -> {
+            String address = binding.textView.getText().toString();
+            if (address.isEmpty() || "Address not found.".equals(address)) {
+                Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
+            double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+
+            db.addAddress(address, latitude, longitude);
+        });
+
+        return binding.getRoot();
     }
 }

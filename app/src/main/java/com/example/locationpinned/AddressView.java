@@ -37,7 +37,6 @@ public class AddressView extends Fragment {
         // initialize geocoder
         findAddress = new FindAddress(getContext());
         db = new DatabaseHelper(getActivity());
-
     }
 
     @Override
@@ -48,18 +47,20 @@ public class AddressView extends Fragment {
 
         // Add New Address
         binding.addAddress.setOnClickListener(v ->
-            NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_adress_view_to_newAddress));
+            NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_address_view_to_newAddress));
 
         // Load File from Raw Resource
         binding.loadFile.setOnClickListener(v -> {
             try {
                 loadFileDB();
+                loadLocations("");
                 populateLinearLayout();
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("LocationData", "Error loading location file", e);
             }
         });
+
         loadLocations("");
         return binding.getRoot();
     }
@@ -84,39 +85,12 @@ public class AddressView extends Fragment {
             // populate database
             db.loadFile(address, longitude, latitude);
             line = in.readLine();
-//            locationObjects.add(new LocationObject(latitude, longitude, address));
         }
         in.close();
     }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
-    private void populateLinearLayout() {
-        LinearLayout linearLayout = binding.locationsLayout;
-
-        for (LocationObject location : locationObjects) {
-            // Inflate the item layout
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.saved_address, null, false);
-
-            // Populate the data
-            TextView tvStreet = view.findViewById(R.id.address);
-            TextView tvLatitude = view.findViewById(R.id.Latitude);
-            TextView tvLongitude = view.findViewById(R.id.Longitude);
-
-            tvStreet.setText(location.getAddress());
-            tvLatitude.setText(String.valueOf(location.getLatitude()));
-            tvLongitude.setText(String.valueOf(location.getLongitude()));
-
-            // Add the populated view to the LinearLayout
-            linearLayout.addView(view);
-        }
-    }
     public void loadLocations(String searchBarText) {
         locationObjects.clear();
-
         Cursor cursor = db.readAllData(searchBarText);
 
         if(cursor.getCount() == 0) {
@@ -132,8 +106,34 @@ public class AddressView extends Fragment {
                 locationObjects.add(location);
             }
         }
-
         populateLinearLayout();
         cursor.close();
+    }
+    private void populateLinearLayout() {
+
+        LinearLayout linearLayout = binding.locationsLayout;
+
+        for (LocationObject location : locationObjects) {
+            // Inflate the item layout
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.saved_address, null, false);
+
+            // Set Views/Data for saved addresses
+            TextView Street = view.findViewById(R.id.address);
+            TextView Latitude = view.findViewById(R.id.Latitude);
+            TextView Longitude = view.findViewById(R.id.Longitude);
+
+            Street.setText(location.getAddress());
+            Latitude.setText(String.valueOf(location.getLatitude()));
+            Longitude.setText(String.valueOf(location.getLongitude()));
+
+            linearLayout.addView(view);
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

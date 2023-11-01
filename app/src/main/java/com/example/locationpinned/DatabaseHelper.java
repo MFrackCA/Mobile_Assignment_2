@@ -40,6 +40,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    public void addAddress(String address, double latitude, double longitude){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // setup content values to pass to table
+        cv.put(COLUMN_ADDRESS, address);
+        cv.put(COLUMN_LATITUDE, latitude);
+        cv.put(COLUMN_LONGITUDE, longitude);
+
+        long result = db.insert(TABLE_NAME, null, cv);
+        if(result == -1){
+            Toast.makeText(context, "Failed to add address to Database", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Successfully added address to Database", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+
     public void loadFile(String address, double longitude, double latitude){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -73,5 +94,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    public void deleteAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+        db.close();
     }
 }
