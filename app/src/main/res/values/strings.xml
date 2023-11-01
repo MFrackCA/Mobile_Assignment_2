@@ -4,4 +4,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save_address">Save Address</string>
     <string name="cancel">Cancel</string>
+    <string name="update_address">Update Address</string>
 </resources>

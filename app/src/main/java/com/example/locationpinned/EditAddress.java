@@ -43,7 +43,7 @@ public class EditAddress extends Fragment {
         // Set initial views
         binding.newLatitude.setText(String.valueOf(locationObject.getLatitude()));
         binding.newLongitude.setText(String.valueOf(locationObject.getLongitude()));
-        binding.textView.setText(locationObject.getAddress());
+        binding.addressOutput.setText(locationObject.getAddress());
 
 
         // cancel new note
@@ -62,15 +62,15 @@ public class EditAddress extends Fragment {
             String address = findAddressHelper.getAddress(latitude, longitude);
 
             if (address != null) {
-                binding.textView.setText(address);
+                binding.addressOutput.setText(address);
             } else {
-                binding.textView.setText("Address not found.");
+                binding.addressOutput.setText("Address not found.");
             }
         });
 
         // Save address to database
         binding.updateAddress.setOnClickListener(v -> {
-            String address = binding.textView.getText().toString();
+            String address = binding.updateAddress.getText().toString();
             if (address.isEmpty() || "Address not found.".equals(address)) {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 return;
