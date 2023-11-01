@@ -93,6 +93,7 @@ public class AddressView extends Fragment {
     private void loadLinearLayout() {
 
         LinearLayout linearLayout = binding.locationsLayout;
+        int marginInPixels = (int) (8 * getResources().getDisplayMetrics().density);
 
         // Clear views when called again
         linearLayout.removeAllViews();
@@ -115,8 +116,8 @@ public class AddressView extends Fragment {
             ImageButton deleteButton = view.findViewById(R.id.deleteButton);
             deleteButton.setOnClickListener(v -> {
                 db.deleteAddress(location.getId());
-                linearLayout.removeView(view);
-                loadLocations("");
+                locationObjects.remove(location);  // Remove location object from the list
+                loadLinearLayout();
             });
 
             // Edit addresses and update db and location array
@@ -125,6 +126,13 @@ public class AddressView extends Fragment {
                 bundle.putSerializable("location", location);
                 NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_address_view_to_editAddress, bundle);
             });
+            // Add margins between cards
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, marginInPixels, 0, marginInPixels);
+            view.setLayoutParams(layoutParams);
 
             linearLayout.addView(view);
         }

@@ -15,7 +15,7 @@ public class FindAddressHelper {
     public FindAddressHelper(Context context) {
         this.geocoder = new Geocoder(context, Locale.getDefault());
     }
-    // Geocoder method to get Address by passing latitude and logitude
+    // Geocoder method to get Address by passing latitude and longitude
     public String getAddress(double latitude, double longitude) {
         try {
             List addressList = geocoder.getFromLocation(latitude, longitude, 1);
