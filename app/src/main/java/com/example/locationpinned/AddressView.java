@@ -3,6 +3,7 @@ package com.example.locationpinned;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,15 +30,17 @@ public class AddressView extends Fragment {
 
     private FragmentAddressViewBinding binding;
     private List<LocationObject> locationObjects = new ArrayList<>();
-    private FindAddress findAddress;
+    private FindAddressHelper findAddressHelper;
 
     private DatabaseHelper db;
+    private SearchView searchView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialize geocoder
-        findAddress = new FindAddress(getContext());
+        findAddressHelper = new FindAddressHelper(getContext());
         db = new DatabaseHelper(getActivity());
+        //db.deleteAllData();
     }
 
     @Override
@@ -61,10 +65,33 @@ public class AddressView extends Fragment {
             }
         });
 
+        //Search Bar on text change filter notes
+        searchView = binding.searchView;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    loadLocations("");
+                    populateLinearLayout();
+                }else{
+                    loadLocations(newText);
+                    populateLinearLayout();
+                }
+                return true;
+            }
+        });
+
         loadLocations("");
+        populateLinearLayout();
         return binding.getRoot();
     }
 
+
+    // Load file to database
     public void loadFileDB() throws IOException {
 
         InputStream raw = getResources().openRawResource(R.raw.location);
@@ -76,11 +103,11 @@ public class AddressView extends Fragment {
 
         // Read file
         while(line != null){
-            // split string get varibales
+            // split string get variables
             String[] split = line.split(",");
             double latitude = Double.parseDouble(split[0].trim());
             double longitude = Double.parseDouble(split[1].trim());
-            String address = findAddress.getAddressFromLatLng(latitude, longitude);
+            String address = findAddressHelper.getAddress(latitude, longitude);
 
             // populate database
             db.loadFile(address, longitude, latitude);
@@ -94,7 +121,7 @@ public class AddressView extends Fragment {
         Cursor cursor = db.readAllData(searchBarText);
 
         if(cursor.getCount() == 0) {
-            Toast.makeText(getActivity(), "No Locations in Table", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No addresses in Table", Toast.LENGTH_SHORT).show();
         } else {
             while(cursor.moveToNext()) {
                 int id = cursor.getInt(0);
@@ -106,12 +133,14 @@ public class AddressView extends Fragment {
                 locationObjects.add(location);
             }
         }
-        populateLinearLayout();
         cursor.close();
     }
     private void populateLinearLayout() {
 
         LinearLayout linearLayout = binding.locationsLayout;
+
+        // Clear views when called again
+        linearLayout.removeAllViews();
 
         for (LocationObject location : locationObjects) {
             // Inflate the item layout
@@ -126,10 +155,18 @@ public class AddressView extends Fragment {
             Latitude.setText(String.valueOf(location.getLatitude()));
             Longitude.setText(String.valueOf(location.getLongitude()));
 
+
+            // Delete notes from db and location objects array
+            ImageButton deleteButton = view.findViewById(R.id.deleteButton);
+            deleteButton.setOnClickListener(v -> {
+                db.deleteAddress(location.getId());
+                linearLayout.removeView(view);
+                loadLocations("");
+            });
+
             linearLayout.addView(view);
         }
     }
-
 
     @Override
     public void onDestroyView() {

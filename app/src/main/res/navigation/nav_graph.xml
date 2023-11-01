@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_address_view_to_newAddress"
             app:destination="@id/newAddress" />
+        <action
+            android:id="@+id/action_address_view_to_editAddress"
+            app:destination="@id/editAddress" />
     </fragment>
     <fragment
         android:id="@+id/newAddress"
@@ -21,6 +24,15 @@
         tools:layout="@layout/fragment_new_address" >
         <action
             android:id="@+id/action_newAddress_to_address_view"
+            app:destination="@id/address_view" />
+    </fragment>
+    <fragment
+        android:id="@+id/editAddress"
+        android:name="com.example.locationpinned.EditAddress"
+        android:label="fragment_edit_address"
+        tools:layout="@layout/fragment_edit_address" >
+        <action
+            android:id="@+id/action_editAddress_to_address_view"
             app:destination="@id/address_view" />
     </fragment>
 </navigation>

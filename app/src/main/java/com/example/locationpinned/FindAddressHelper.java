@@ -8,14 +8,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class FindAddress {
+public class FindAddressHelper {
 
     private Geocoder geocoder;
 
-    public FindAddress(Context context) {
+    public FindAddressHelper(Context context) {
         this.geocoder = new Geocoder(context, Locale.getDefault());
     }
-    public String getAddressFromLatLng(double latitude, double longitude) {
+    // Geocoder method to get Address by passing latitude and logitude
+    public String getAddress(double latitude, double longitude) {
         try {
             List addressList = geocoder.getFromLocation(latitude, longitude, 1);
             if (addressList != null && addressList.size() > 0) {

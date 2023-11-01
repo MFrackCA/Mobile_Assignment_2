@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.locationpinned.databinding.FragmentEditAddressBinding;
 import com.example.locationpinned.databinding.FragmentNewAddressBinding;
 
 
-public class NewAddress extends Fragment {
+public class EditAddress extends Fragment {
 
-    private FragmentNewAddressBinding binding;
+    private FragmentEditAddressBinding binding;
     private DatabaseHelper db;
     private FindAddressHelper findAddressHelper;
     public void onCreate(Bundle savedInstanceState) {
@@ -42,16 +43,16 @@ public class NewAddress extends Fragment {
         // Find address with geocode
         binding.geocode.setOnClickListener(v -> {
 
-                double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
-                double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
-                // Call get address method
-                String address = findAddressHelper.getAddress(latitude, longitude);
+            double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
+            double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+            // Call get address method
+            String address = findAddressHelper.getAddress(latitude, longitude);
 
-                if (address != null) {
-                    binding.textView.setText(address);
-                } else {
-                    binding.textView.setText("Address not found.");
-                }
+            if (address != null) {
+                binding.textView.setText(address);
+            } else {
+                binding.textView.setText("Address not found.");
+            }
         });
 
         // Save address to database
