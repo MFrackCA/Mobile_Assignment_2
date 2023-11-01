@@ -65,6 +65,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateAddress(int id, String address, double latitude, double longitude) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // setup content values to pass to table
+        cv.put(COLUMN_ADDRESS, address);
+        cv.put(COLUMN_LATITUDE, latitude);
+        cv.put(COLUMN_LONGITUDE, longitude);
+
+        int result = db.update(TABLE_NAME, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        if(result == 0) {
+            Toast.makeText(context, "Failed to update address", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Address updated successfully", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
     public void loadFile(String address, double longitude, double latitude){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues cv = new ContentValues();

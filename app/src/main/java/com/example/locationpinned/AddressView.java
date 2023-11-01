@@ -58,7 +58,7 @@ public class AddressView extends Fragment {
             try {
                 loadFileDB();
                 loadLocations("");
-                populateLinearLayout();
+                loadLinearLayout();
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("LocationData", "Error loading location file", e);
@@ -66,8 +66,7 @@ public class AddressView extends Fragment {
         });
 
         //Search Bar on text change filter notes
-        searchView = binding.searchView;
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -76,20 +75,60 @@ public class AddressView extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
                     loadLocations("");
-                    populateLinearLayout();
+                    loadLinearLayout();
                 }else{
                     loadLocations(newText);
-                    populateLinearLayout();
+                    loadLinearLayout();
                 }
                 return true;
             }
         });
 
         loadLocations("");
-        populateLinearLayout();
+        loadLinearLayout();
         return binding.getRoot();
     }
 
+    // Load saved addresses into Linear layout
+    private void loadLinearLayout() {
+
+        LinearLayout linearLayout = binding.locationsLayout;
+
+        // Clear views when called again
+        linearLayout.removeAllViews();
+
+        for (LocationObject location : locationObjects) {
+            // Inflate the item layout
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.saved_address, null, false);
+
+            // Set Views for saved addresses
+            TextView Street = view.findViewById(R.id.address);
+            TextView Latitude = view.findViewById(R.id.Latitude);
+            TextView Longitude = view.findViewById(R.id.Longitude);
+
+            // Set Data for saved addresses
+            Street.setText(location.getAddress());
+            Latitude.setText(String.valueOf(location.getLatitude()));
+            Longitude.setText(String.valueOf(location.getLongitude()));
+
+            // Delete address from db and location array
+            ImageButton deleteButton = view.findViewById(R.id.deleteButton);
+            deleteButton.setOnClickListener(v -> {
+                db.deleteAddress(location.getId());
+                linearLayout.removeView(view);
+                loadLocations("");
+            });
+
+            // Edit addresses and update db and location array
+            view.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("location", location);
+                NavHostFragment.findNavController(AddressView.this).navigate(R.id.action_address_view_to_editAddress, bundle);
+            });
+
+            linearLayout.addView(view);
+        }
+    }
 
     // Load file to database
     public void loadFileDB() throws IOException {
@@ -134,38 +173,6 @@ public class AddressView extends Fragment {
             }
         }
         cursor.close();
-    }
-    private void populateLinearLayout() {
-
-        LinearLayout linearLayout = binding.locationsLayout;
-
-        // Clear views when called again
-        linearLayout.removeAllViews();
-
-        for (LocationObject location : locationObjects) {
-            // Inflate the item layout
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.saved_address, null, false);
-
-            // Set Views/Data for saved addresses
-            TextView Street = view.findViewById(R.id.address);
-            TextView Latitude = view.findViewById(R.id.Latitude);
-            TextView Longitude = view.findViewById(R.id.Longitude);
-
-            Street.setText(location.getAddress());
-            Latitude.setText(String.valueOf(location.getLatitude()));
-            Longitude.setText(String.valueOf(location.getLongitude()));
-
-
-            // Delete notes from db and location objects array
-            ImageButton deleteButton = view.findViewById(R.id.deleteButton);
-            deleteButton.setOnClickListener(v -> {
-                db.deleteAddress(location.getId());
-                linearLayout.removeView(view);
-                loadLocations("");
-            });
-
-            linearLayout.addView(view);
-        }
     }
 
     @Override

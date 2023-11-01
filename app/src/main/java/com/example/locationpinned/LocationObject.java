@@ -1,6 +1,8 @@
 package com.example.locationpinned;
 
-public class LocationObject {
+import java.io.Serializable;
+
+public class LocationObject implements Serializable {
 
     private Integer id;
     private double latitude;
@@ -47,11 +49,6 @@ public class LocationObject {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-    // for testing remove at end
-    @Override
-    public String toString() {
-        return "ID: " + id + ", Latitude: " + latitude + ", Longitude: " + longitude + ", Address: " + address;
     }
 
 }

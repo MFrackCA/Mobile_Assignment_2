@@ -19,10 +19,18 @@ public class EditAddress extends Fragment {
     private FragmentEditAddressBinding binding;
     private DatabaseHelper db;
     private FindAddressHelper findAddressHelper;
+    private Bundle bundle;
+    private LocationObject locationObject;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getActivity());
         findAddressHelper = new FindAddressHelper(getActivity());
+
+        // unpack bundle for location
+        bundle = this.getArguments();
+        if (bundle != null){
+            locationObject = (LocationObject) bundle.getSerializable("location");
+        }
     }
 
 
@@ -30,13 +38,18 @@ public class EditAddress extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentNewAddressBinding.inflate(inflater, container, false);
+        binding = FragmentEditAddressBinding.inflate(inflater, container, false);
+
+        // Set initial views
+        binding.newLatitude.setText(String.valueOf(locationObject.getLatitude()));
+        binding.newLongitude.setText(String.valueOf(locationObject.getLongitude()));
+        binding.textView.setText(locationObject.getAddress());
 
 
         // cancel new note
         binding.cancel.setOnClickListener(v -> {
             // Navigate back to home screen
-            NavHostFragment.findNavController(NewAddress.this)
+            NavHostFragment.findNavController(EditAddress.this)
                     .navigate(R.id.action_newAddress_to_address_view);
         });
 
@@ -56,7 +69,7 @@ public class EditAddress extends Fragment {
         });
 
         // Save address to database
-        binding.saveAddress.setOnClickListener(v -> {
+        binding.updateAddress.setOnClickListener(v -> {
             String address = binding.textView.getText().toString();
             if (address.isEmpty() || "Address not found.".equals(address)) {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
@@ -65,7 +78,8 @@ public class EditAddress extends Fragment {
 
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
-            db.addAddress(address, latitude, longitude);
+
+            db.updateAddress(locationObject.getId(), address, latitude, longitude);
         });
 
         return binding.getRoot();
