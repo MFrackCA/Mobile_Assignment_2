@@ -49,7 +49,7 @@ public class EditAddress extends Fragment {
         binding.cancel.setOnClickListener(v -> {
             // Navigate back to home screen
             NavHostFragment.findNavController(EditAddress.this)
-                    .navigate(R.id.action_newAddress_to_address_view);
+                    .navigate(R.id.action_editAddress_to_address_view);
         });
 
         // Find address with geocode
@@ -69,7 +69,7 @@ public class EditAddress extends Fragment {
 
         // Save address to database
         binding.updateAddress.setOnClickListener(v -> {
-            String address = binding.updateAddress.getText().toString();
+            String address = binding.addressOutput.getText().toString();
             if (address.isEmpty() || "Address not found.".equals(address)) {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 return;
@@ -79,6 +79,10 @@ public class EditAddress extends Fragment {
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
 
             db.updateAddress(locationObject.getId(), address, latitude, longitude);
+
+            // Navigate back to home screen
+            NavHostFragment.findNavController(EditAddress.this)
+                    .navigate(R.id.action_editAddress_to_address_view);
         });
 
         return binding.getRoot();

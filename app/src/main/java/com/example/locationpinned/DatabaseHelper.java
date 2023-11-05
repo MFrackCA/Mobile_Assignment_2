@@ -92,15 +92,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_LATITUDE, latitude);
         cv.put(COLUMN_LONGITUDE, longitude);
 
-
         //insert note into table
-        long result = db.insert(TABLE_NAME, null, cv);
-        // Check if save was successful
-        if(result ==-1){
-            Toast.makeText(context, "Failed to add to Database", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "Successfully added location to Database", Toast.LENGTH_SHORT).show();
-        }
+        db.insert(TABLE_NAME, null, cv);
+
         db.close();
     }
 

@@ -92,7 +92,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_longitude" />
 
-    <!-- Save Address -->
+    <!-- update Address -->
     <Button
         android:id="@+id/update_address"
         android:layout_width="300dp"

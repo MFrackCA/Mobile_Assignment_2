@@ -65,6 +65,8 @@ public class NewAddress extends Fragment {
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
             db.addAddress(address, latitude, longitude);
+            NavHostFragment.findNavController(NewAddress.this)
+                    .navigate(R.id.action_newAddress_to_address_view);
         });
 
         return binding.getRoot();

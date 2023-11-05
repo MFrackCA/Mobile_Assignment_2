@@ -59,6 +59,7 @@ public class HomeView extends Fragment {
                 loadFileDB();
                 loadLocations("");
                 loadLinearLayout();
+                Toast.makeText(getContext(), "Successfully added file locations to Database", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("LocationData", "Error loading location file", e);
@@ -160,6 +161,7 @@ public class HomeView extends Fragment {
             db.loadFile(address, longitude, latitude);
             line = in.readLine();
         }
+
         in.close();
     }
 
