@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
-
+    // add address to database
     public void addAddress(String address, double latitude, double longitude){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -83,6 +83,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    // Exactly the same as Add Address but I create this method because
+    // I did not want Toast messages playing 50 times for adding a file
     public void loadFile(String address, double longitude, double latitude){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -97,7 +100,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
-
+    // read all data from table
+    // if search bar text is input it is passed as an argument to filter locations
     public Cursor readAllData(String searchBarText) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -112,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    //Deletes all data from table used for testing
     public void deleteAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, null, null);

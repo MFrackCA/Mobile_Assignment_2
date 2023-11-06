@@ -17,21 +17,22 @@ public class EditAddress extends Fragment {
 
     private FragmentEditAddressBinding binding;
     private DatabaseHelper db;
-    private GeocoderHelper findAddressHelper;
+    private GeocoderHelper geocoderHelper;
     private Bundle bundle;
     private LocationObject locationObject;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new DatabaseHelper(getActivity());
-        findAddressHelper = new GeocoderHelper(getActivity());
 
-        // unpack bundle for location
+        // instantiate db and geocoder
+        db = new DatabaseHelper(getActivity());
+        geocoderHelper = new GeocoderHelper(getActivity());
+
+        // unpack bundle for saved location
         bundle = this.getArguments();
         if (bundle != null){
             locationObject = (LocationObject) bundle.getSerializable("location");
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,10 +56,12 @@ public class EditAddress extends Fragment {
         // Find address with geocode
         binding.geocode.setOnClickListener(v -> {
 
+            // set latitude and longitude
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
-            // Call get address method
-            String address = findAddressHelper.getAddress(latitude, longitude);
+
+            // Call get address method from geocoder
+            String address = geocoderHelper.getAddress(latitude, longitude);
 
             if (address != null) {
                 binding.addressOutput.setText(address);
@@ -70,14 +73,18 @@ public class EditAddress extends Fragment {
         // Save address to database
         binding.updateAddress.setOnClickListener(v -> {
             String address = binding.addressOutput.getText().toString();
+
+            // if address is found set textview to display address
+            // else if geocode finds nothing set text view to address not found
             if (address.isEmpty() || "Address not found.".equals(address)) {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            // set latitude and longitude
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
 
+            // update address in DB
             db.updateAddress(locationObject.getId(), address, latitude, longitude);
 
             // Navigate back to home screen

@@ -30,7 +30,7 @@ public class HomeView extends Fragment {
 
     private FragmentHomeViewBinding binding;
     private List<LocationObject> locationObjects = new ArrayList<>();
-    private GeocoderHelper findAddressHelper;
+    private GeocoderHelper geocoderHelper;
 
     private DatabaseHelper db;
     private SearchView searchView;
@@ -38,7 +38,7 @@ public class HomeView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialize geocoder
-        findAddressHelper = new GeocoderHelper(getContext());
+        geocoderHelper = new GeocoderHelper(getContext());
         db = new DatabaseHelper(getActivity());
         //db.deleteAllData();
     }
@@ -155,7 +155,7 @@ public class HomeView extends Fragment {
             String[] split = line.split(",");
             double latitude = Double.parseDouble(split[0].trim());
             double longitude = Double.parseDouble(split[1].trim());
-            String address = findAddressHelper.getAddress(latitude, longitude);
+            String address = geocoderHelper.getAddress(latitude, longitude);
 
             // populate database
             db.loadFile(address, longitude, latitude);

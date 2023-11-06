@@ -17,11 +17,13 @@ public class NewAddress extends Fragment {
 
     private FragmentNewAddressBinding binding;
     private DatabaseHelper db;
-    private GeocoderHelper findAddressHelper;
+    private GeocoderHelper geocoderHelper;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // instantiate db and geocoder
         db = new DatabaseHelper(getActivity());
-        findAddressHelper = new GeocoderHelper(getActivity());
+        geocoderHelper = new GeocoderHelper(getActivity());
     }
 
 
@@ -42,11 +44,15 @@ public class NewAddress extends Fragment {
         // Find address with geocode
         binding.geocode.setOnClickListener(v -> {
 
+                // set latitude and longitude
                 double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
                 double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
-                // Call get address method
-                String address = findAddressHelper.getAddress(latitude, longitude);
 
+                // Call get address method from geocoder
+                String address = geocoderHelper.getAddress(latitude, longitude);
+
+                // if address is found set textview to display address
+                // else if geocode finds nothing set text view to address not found
                 if (address != null) {
                     binding.textView.setText(address);
                 } else {
@@ -57,14 +63,21 @@ public class NewAddress extends Fragment {
         // Save address to database
         binding.saveAddress.setOnClickListener(v -> {
             String address = binding.textView.getText().toString();
+
+            // if address is empty or message not found do not allow saving to database
             if (address.isEmpty() || "Address not found.".equals(address)) {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            // set latitude and longitude vars
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+
+            // save address to database
             db.addAddress(address, latitude, longitude);
+
+            // navigate back home
             NavHostFragment.findNavController(NewAddress.this)
                     .navigate(R.id.action_newAddress_to_address_view);
         });

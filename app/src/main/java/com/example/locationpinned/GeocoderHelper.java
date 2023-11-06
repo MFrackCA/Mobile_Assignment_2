@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+
 public class GeocoderHelper {
 
     private Geocoder geocoder;
@@ -18,7 +19,11 @@ public class GeocoderHelper {
     // Geocoder method to get Address by passing latitude and longitude
     public String getAddress(double latitude, double longitude) {
         try {
+            // call geocoder get from location method and only return first result
             List addressList = geocoder.getFromLocation(latitude, longitude, 1);
+
+            // if address list is not empty build address string
+            // and return address for latitude and longitude
             if (addressList != null && addressList.size() > 0) {
                 Address address = (Address)
                 addressList.get(0);
