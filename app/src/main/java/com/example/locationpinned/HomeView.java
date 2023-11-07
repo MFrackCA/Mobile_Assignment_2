@@ -75,10 +75,14 @@ public class HomeView extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
+                // if searchbar is empty load all addresses
                 if (newText.isEmpty()) {
                     loadLocations("");
                     loadLinearLayout();
-                }else{
+                }
+                // Load address or addresses based on search input
+                else
+                {
                     loadLocations(newText);
                     loadLinearLayout();
                 }
@@ -166,6 +170,8 @@ public class HomeView extends Fragment {
         in.close();
     }
 
+    // Queries database for all data and adds locations to List
+    // Used for updating linear layout of saved addresses on Home View
     public void loadLocations(String searchBarText) {
         locationObjects.clear();
         Cursor cursor = db.readAllData(searchBarText);
