@@ -31,9 +31,7 @@ public class HomeView extends Fragment {
     private FragmentHomeViewBinding binding;
     private List<LocationObject> locationObjects = new ArrayList<>();
     private GeocoderHelper geocoderHelper;
-
     private DatabaseHelper db;
-    private SearchView searchView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +40,8 @@ public class HomeView extends Fragment {
         db = new DatabaseHelper(getActivity());
 
         //Used for Testing
-        db.deleteAllData();
+        //Wipe all data from table
+        //db.deleteAllData();
     }
 
     @Override
