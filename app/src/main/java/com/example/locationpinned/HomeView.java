@@ -37,10 +37,12 @@ public class HomeView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // initialize geocoder
+        // initialize geocoder and database
         geocoderHelper = new GeocoderHelper(getContext());
         db = new DatabaseHelper(getActivity());
-        //db.deleteAllData();
+
+        //Used for Testing
+        db.deleteAllData();
     }
 
     @Override

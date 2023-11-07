@@ -44,10 +44,20 @@ public class NewAddress extends Fragment {
         // Find address with geocode
         binding.geocode.setOnClickListener(v -> {
 
-                // set latitude and longitude
-                double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
-                double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+            // set latitude and longitude
+            double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
+            double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
 
+            // Check that latitude or longitude are within range
+            if(latitude < -90 || latitude > 90){
+                Toast.makeText(getActivity(), "Latitude must be between -90 and 90", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(longitude <-180 || longitude > 180) {
+                Toast.makeText(getActivity(), "Latitude must be between -90 and 90", Toast.LENGTH_LONG).show();
+                return;
+            }
                 // Call get address method from geocoder
                 String address = geocoderHelper.getAddress(latitude, longitude);
 
@@ -57,11 +67,17 @@ public class NewAddress extends Fragment {
                     binding.textView.setText(address);
                 } else {
                     binding.textView.setText("Address not found.");
+                    Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 }
         });
 
         // Save address to database
         binding.saveAddress.setOnClickListener(v -> {
+            // set latitude and longitude vars
+            double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
+            double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
+
+            // get address
             String address = binding.textView.getText().toString();
 
             // if address is empty or message not found do not allow saving to database
@@ -69,10 +85,6 @@ public class NewAddress extends Fragment {
                 Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            // set latitude and longitude vars
-            double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
-            double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
 
             // save address to database
             db.addAddress(address, latitude, longitude);

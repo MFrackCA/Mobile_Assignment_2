@@ -92,48 +92,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_longitude" />
 
-    <!-- update Address -->
     <Button
         android:id="@+id/update_address"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/button_background"
         android:text="@string/update_address"
-        app:backgroundTint="#0288D1"
         android:textSize="20sp"
+        app:backgroundTint="#0288D1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.148"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/geocode" />
 
-    <!-- Geocode -->
     <Button
         android:id="@+id/geocode"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_width="320dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="140dp"
         android:background="@drawable/button_background"
         android:text="Geocode"
         android:textSize="20sp"
         app:backgroundTint="#0C9753"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/address_output" />
 
-    <!-- Cancel -->
     <Button
         android:id="@+id/cancel"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/button_background"
         android:text="@string/cancel"
         android:textSize="20sp"
         app:backgroundTint="#C62E2E"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_address" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/update_address"
+        app:layout_constraintTop_toBottomOf="@+id/geocode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,6 +60,17 @@ public class EditAddress extends Fragment {
             double latitude = Double.parseDouble(binding.newLatitude.getText().toString().trim());
             double longitude = Double.parseDouble(binding.newLongitude.getText().toString().trim());
 
+            // Check that latitude or longitude are within range
+
+            if(latitude < -90 || latitude > 90){
+                Toast.makeText(getActivity(), "Latitude must be between -90 and 90", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(longitude <-180 || longitude > 180) {
+                Toast.makeText(getActivity(), "Latitude must be between -90 and 90", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             // Call get address method from geocoder
             String address = geocoderHelper.getAddress(latitude, longitude);
 
@@ -67,6 +78,7 @@ public class EditAddress extends Fragment {
                 binding.addressOutput.setText(address);
             } else {
                 binding.addressOutput.setText("Address not found.");
+                Toast.makeText(getActivity(), "Please enter a valid address.", Toast.LENGTH_SHORT).show();
             }
         });
 
